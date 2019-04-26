@@ -215,7 +215,8 @@ function scan () {
         rootInstances.push(instance)
       }
 
-      return true
+      //Yaro: Don't stop when we reach an instance, because we nest Vue instances inside others
+      return false
     }
   }
 
@@ -228,8 +229,11 @@ function scan () {
         }
         return true
       }
-      let instance = node.__vue__
-
+      let instance;
+      //Yaro: Because we no longer stop when reaching an instance, only process roots
+      if (node.__vue__ && node.__vue__ === node.__vue__.$root){
+       instance = node.__vue__
+      }
       return processInstance(instance)
     })
   } else {
